@@ -51,7 +51,7 @@ public class ScreenshotUtility {
         if(isImageDifferent) {
             BufferedImage differentBufferedImage = imageDiff.getMarkedImage();
             try{
-                ImageIO.write(differentBufferedImage, "png", new File(System.getProperty("user.dir")+"/src/main/resources/images/different/"+baseImage+".png"));
+                ImageIO.write(differentBufferedImage, "png", new File(System.getProperty("user.dir")+"/src/main/resources/images/difference/"+baseImage+".png"));
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
