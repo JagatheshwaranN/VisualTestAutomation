@@ -1,22 +1,32 @@
 package qa.jaga.core;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.google.common.util.concurrent.Uninterruptibles;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 public class TestFireRegressionTest {
-
+    ExtentReports extentReports;
+    ExtentTest extentTest;
     public WebDriver driver;
 
     @BeforeClass
     public void setUp() {
+        extentReports = new ExtentReports();
+        ExtentSparkReporter sparkReporter = new ExtentSparkReporter(System.getProperty("user.dir")+"/report/ExtentReport.html");
+        extentReports.attachReporter(sparkReporter);
         try{
             FileUtils.cleanDirectory(new File(System.getProperty("user.dir")+"/src/main/resources/images/screenshot"));
             FileUtils.cleanDirectory(new File(System.getProperty("user.dir")+"/src/main/resources/images/difference"));
@@ -28,11 +38,16 @@ public class TestFireRegressionTest {
         this.driver.get("https://demo.testfire.net/index.jsp");
     }
 
+    @BeforeMethod
+    public void reportInit(Method method) {
+        extentTest = extentReports.createTest(method.getName());
+    }
+
     @Test(dataProvider = "dataSupplier")
     public void testFireTest(String url, String imageName) {
         this.driver.navigate().to(url);
         new ScreenshotUtility().takePageScreenshot(this.driver, imageName);
-        new ScreenshotUtility().areImagesEqual(imageName, imageName);
+        Assert.assertTrue(new ScreenshotUtility().areImagesEqual(imageName, imageName));
     }
 
     @DataProvider
@@ -47,10 +62,25 @@ public class TestFireRegressionTest {
         };
     }
 
+    @AfterMethod
+    public void captureResult(ITestResult result) {
+        if(result.getStatus() == ITestResult.SUCCESS)
+            extentTest.log(Status.PASS, "Test Passed");
+        if(result.getStatus() == ITestResult.FAILURE) {
+            extentTest.log(Status.FAIL, "Test Failed");
+            extentTest.log(Status.FAIL, result.getThrowable());
+        }
+        if(result.getStatus() == ITestResult.SKIP) {
+            extentTest.log(Status.SKIP, "Test Skipped");
+        }
+    }
+
     @AfterClass
     public void tearDown() {
         if(this.driver != null)
             this.driver.quit();
+        extentReports.removeTest(extentTest);
+        extentReports.flush();
     }
 
 }

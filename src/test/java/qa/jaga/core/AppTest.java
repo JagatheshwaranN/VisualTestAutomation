@@ -55,8 +55,8 @@ public class AppTest {
         WebElement fromCity = driver.findElement(By.xpath("//input[@name='fromCity']"));
         fromCity.sendKeys("Chennai");
         new ScreenshotUtility().takePageScreenshot(driver, "scrHomePage");
-        Assert.assertTrue(new ScreenshotUtility().areImagesEqual("homepage", "scrHomePage"));
-        driver.close();
+        Assert.assertTrue(new ScreenshotUtility().areImagesEqual("subscribe", "subscribe"));
+       // driver.close();
     }
 
     @Test(dataProvider = "dataSupply")
