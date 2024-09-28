@@ -130,7 +130,8 @@ public class ScreenshotUtility {
                 return false; // Returns false if images are not equal
             }
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            // Logs any errors that occur while comparing the images
+            LOGGER.log(Level.SEVERE, "Error while comparing images: " + ex.getMessage(), ex);
         }
         return true; // Returns true if images are equal
     }
