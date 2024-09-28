@@ -84,5 +84,6 @@ an issue first to discuss what you would like to change.
 - Selenium WebDriver
 - AShot
 - TestNG
+- Extent Report
 
 
