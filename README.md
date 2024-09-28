@@ -71,5 +71,18 @@ VisualTestAutomation/
 │
 └── pom.xml 
 ```
+### Usage
+Use the ScreenshotUtility class for capturing screenshots and comparing images. It contains methods for taking screenshots of pages
+and specific elements, as well as comparing them against baseline images.
+The SampleTest class provides test cases to demonstrate how to use the ScreenshotUtility.
+
+### Contributing
+If you would like to contribute to this project, please fork the repository and create a pull request. For major changes, please open
+an issue first to discuss what you would like to change.
+
+### Acknowledgements
+- Selenium WebDriver
+- AShot
+- TestNG
 
 
