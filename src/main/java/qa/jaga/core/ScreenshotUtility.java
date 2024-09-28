@@ -6,6 +6,8 @@ import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategy;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,7 +17,7 @@ import java.io.IOException;
 public class ScreenshotUtility {
 
     public void takePageScreenshot(WebDriver driver, String imageName) {
-        Screenshot screenshot = new AShot().takeScreenshot(driver);
+        Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
         BufferedImage bufferedImage = screenshot.getImage();
         File file = new File(System.getProperty("user.dir")+"/src/main/resources/images/screenshot/"+imageName+".png");
         try {
