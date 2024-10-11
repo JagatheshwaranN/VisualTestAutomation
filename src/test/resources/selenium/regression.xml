@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Visual Regression Test" verbose="1" >
+    <test name="Regression">
+        <classes>
+            <class name="qa.jaga.core.selenium.TestFireRegressionTest"/>
+        </classes>
+    </test>
+</suite>

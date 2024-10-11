@@ -1,4 +1,4 @@
-package qa.jaga.core;
+package qa.jaga.core.selenium;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,9 +29,9 @@ public class ScreenshotUtility {
     private static final Logger LOGGER = Logger.getLogger(ScreenshotUtility.class.getName());
 
     // Constants for directories where screenshots, baseline images, and differences are stored
-    private static final String SCREENSHOT_DIR = System.getProperty("user.dir") + "/src/main/resources/images/screenshot/";
-    private static final String BASELINE_DIR = System.getProperty("user.dir") + "/src/main/resources/images/baseline/";
-    private static final String DIFFERENCE_DIR = System.getProperty("user.dir") + "/src/main/resources/images/difference/";
+    private static final String SCREENSHOT_DIR = System.getProperty("user.dir") + "/src/main/resources/selenium/images/screenshot/";
+    private static final String BASELINE_DIR = System.getProperty("user.dir") + "/src/main/resources/selenium/images/baseline/";
+    private static final String DIFFERENCE_DIR = System.getProperty("user.dir") + "/src/main/resources/selenium/images/difference/";
 
     /**
      * Constructor initializes the ScreenshotUtility by ensuring that the necessary

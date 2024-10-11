@@ -1,4 +1,4 @@
-package qa.jaga.core;
+package qa.jaga.core.selenium;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -35,8 +35,8 @@ public class TestFireRegressionTest {
     private WebDriver driver;
 
     // Constants to define the directory paths for screenshots, differences, and reports
-    private static final String SCREENSHOT_DIR = System.getProperty("user.dir") + "/src/main/resources/images/screenshot/";
-    private static final String DIFFERENCE_DIR = System.getProperty("user.dir") + "/src/main/resources/images/difference/";
+    private static final String SCREENSHOT_DIR = System.getProperty("user.dir") + "/src/main/resources/selenium/images/screenshot/";
+    private static final String DIFFERENCE_DIR = System.getProperty("user.dir") + "/src/main/resources/selenium/images/difference/";
     private static final String EXTENT_DIR = System.getProperty("user.dir") + "/report/ExtentReport.html";
 
     // Logger for logging errors and messages to the console

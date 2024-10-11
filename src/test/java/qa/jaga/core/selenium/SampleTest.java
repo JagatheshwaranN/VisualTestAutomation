@@ -1,4 +1,4 @@
-package qa.jaga.core;
+package qa.jaga.core.selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
