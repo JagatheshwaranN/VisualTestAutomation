@@ -2,7 +2,7 @@
 <suite name="Visual Regression Test" verbose="1" >
     <test name="Regression">
         <classes>
-            <class name="qa.jaga.core.playwright.TestFireRegressionTest"/>
+            <class name="qa.jaga.core.playwright.PracticeTestAutomationRegressionTest"/>
         </classes>
     </test>
 </suite>
