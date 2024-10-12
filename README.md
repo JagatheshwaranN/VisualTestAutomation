@@ -2,8 +2,13 @@
 
 ## Overview
 Visual Test Automation is a framework designed to automate the process of capturing screenshots and comparing them against baseline images 
-to ensure the visual integrity of web applications. Utilizing Selenium WebDriver and the AShot library, this framework allows for thorough 
-visual testing by detecting differences in UI elements or entire pages.
+to ensure the visual integrity of web applications. This framework has implemented in both selenium and playwright.
+### Selenium
+Utilizing Selenium WebDriver and the AShot library, this framework allows for thorough visual testing by detecting differences in UI elements
+or entire pages.
+### Playwright
+Utilizing Playwright and the Image-Comparison library, this framework allows for thorough visual testing by detecting differences in UI elements
+or entire pages.
 
 ## Features
 - **Page Screenshot Capture**: Easily capture screenshots of entire web pages.
@@ -17,7 +22,9 @@ Before you begin, ensure you have met the following requirements:
 - Java Development Kit (JDK) 8 or higher
 - Apache Maven
 - IntelliJ IDEA or any preferred IDE
-- Selenium, Ashot, TestNG and Extent dependencies
+- Selenium, and Ashot dependencies
+- Playwright, and Image-Comparison dependencies
+- TestNG and Extent dependencies
 
 ## Getting Started
 
@@ -32,7 +39,11 @@ Navigate to the project directory and use Maven to install the required dependen
 mvn clean install
 ```
 ### 3. Configuration
+## Selenium
 Ensure that the Driver is accessible in your system, or configure it in your code.
+Update the base image paths in the ScreenshotUtility class to point to your image directories.
+## Playwright
+Ensure that the Playwright is accessible in your system, or configure it in your code.
 Update the base image paths in the ScreenshotUtility class to point to your image directories.
 
 ### 4. Running Tests
@@ -50,22 +61,36 @@ VisualTestAutomation/
 │   │   │   └── qa/
 │   │   │       └── jaga/
 │   │   │           └── core/
-│   │   │               └── ScreenshotUtility.java
+│   │   │               └── playwright/
+│   │   │               │   └── ScreenshotUtility.java
+│   │   │               └── selenium/
+│   │   │                   └── ScreenshotUtility.java
 │   │   └── resources/
-│   │       └──  images/
-│   │            ├── baseline/
-│   │            ├── difference/
-│   │            └── screenshot/
+│   │       └── playwright/
+│   │       │   └──  images/
+│   │       │        ├── baseline/
+│   │       │        ├── difference/
+│   │       │        └── screenshot/
+│   │       └── selenium/
+│   │           └──  images/
+│   │                ├── baseline/
+│   │                ├── difference/
+│   │                └── screenshot/
 │   │
 │   └── test/
 │       ├── java/
 │       │   └── core/
-│       │       ├── SampleTest.java
-│       │       └── TestFireRegressionTest.java
+│       │        └── playwright/
+│       │        │   └── TestFireRegressionTest.java
+│       │        └── selenium/
+│       │           ├── SampleTest.java
+│       │           └── TestFireRegressionTest.java
 │       │
 │       └── resources/
-│           └── regression.xml
-│
+│           └── playwright/
+│           │   └── regression.xml
+│           └── selenium/
+│               └── regression.xml
 ├── report/
 │   └── ExtentReport.html
 │
@@ -83,6 +108,8 @@ an issue first to discuss what you would like to change.
 ### Acknowledgements
 - Selenium WebDriver
 - AShot
+- Playwright
+- Image-Comparison
 - TestNG
 - Extent Report
 
