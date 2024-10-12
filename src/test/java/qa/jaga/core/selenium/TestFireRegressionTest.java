@@ -138,6 +138,7 @@ public class TestFireRegressionTest {
     public void captureResult(ITestResult result, ITestContext context) {
         // Retrieves the screenshot name from the test context
         String imageName = context.getCurrentXmlTest().getParameter("screenshot");
+
         // Constructs the path for the difference image if any test fails
         String screenshotPath = DIFFERENCE_DIR + imageName + ".png";
 
@@ -145,11 +146,13 @@ public class TestFireRegressionTest {
         if (result.getStatus() == ITestResult.SUCCESS) {
             extentTest.log(Status.PASS, "Test Passed");
         } else if (result.getStatus() == ITestResult.FAILURE) {
+
             // Adds the screenshot to the report if the test fails
             String screenshot = extentTest.addScreenCaptureFromPath(screenshotPath).toString();
             extentTest.log(Status.FAIL, "Test Failed. Screenshot: " + screenshot);
             extentTest.log(Status.FAIL, result.getThrowable());
         } else if (result.getStatus() == ITestResult.SKIP) {
+
             // Logs the test as skipped if the status is skipped
             extentTest.log(Status.SKIP, "Test Skipped");
         }
@@ -164,6 +167,7 @@ public class TestFireRegressionTest {
         if (this.driver != null) {
             this.driver.quit();
         }
+
         // Flushes and finalizes the ExtentReports
         if (extentReports != null) {
             extentReports.flush();

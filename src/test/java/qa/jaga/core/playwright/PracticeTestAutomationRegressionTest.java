@@ -6,7 +6,6 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.microsoft.playwright.*;
 import org.apache.commons.io.FileUtils;
-
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -15,15 +14,17 @@ import org.testng.annotations.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * TestFireRegressionTest class automates the process of capturing page screenshots,
+ * PracticeTestAutomationRegressionTest class automates the process of capturing page screenshots,
  * comparing them, and generating ExtentReports for visual test results.
  * It utilizes TestNG for managing test cases and assertions.
  */
-public class TestFireRegressionTest {
+public class PracticeTestAutomationRegressionTest {
 
     // Declares an ExtentReports object to manage the reporting
     private ExtentReports extentReports;
@@ -31,9 +32,10 @@ public class TestFireRegressionTest {
     // Declares an ExtentTest object to manage the individual test logging
     private ExtentTest extentTest;
 
-    // WebDriver instance to control the browser during tests
+    // Playwright instance to control the browser during tests
     private Playwright playwright;
 
+    // Page instance to interact with browser pages
     private Page page;
 
     // Constants to define the directory paths for screenshots, differences, and reports
@@ -42,11 +44,11 @@ public class TestFireRegressionTest {
     private static final String EXTENT_DIR = System.getProperty("user.dir") + "/report/ExtentReport.html";
 
     // Logger for logging errors and messages to the console
-    private static final Logger LOGGER = Logger.getLogger(TestFireRegressionTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PracticeTestAutomationRegressionTest.class.getName());
 
     /**
      * setUp method initializes ExtentReports, cleans the screenshot directories,
-     * and sets up the WebDriver to open the browser for testing.
+     * and sets up the Playwright to open the browser for testing.
      */
     @BeforeClass
     public void setUp() {
@@ -64,23 +66,31 @@ public class TestFireRegressionTest {
             // Cleans the difference directory (for comparing images)
             FileUtils.cleanDirectory(new File(DIFFERENCE_DIR));
         } catch (IOException ex) {
+
             // Logs any IOException errors encountered during cleaning directories
             LOGGER.log(Level.SEVERE, "Error cleaning directories: " + ex.getMessage(), ex);
         }
 
-        // Initializes ChromeDriver to automate Chrome browser actions
+        // Initializes Playwright to launch the browser (replaces WebDriver)
         this.playwright = Playwright.create();
+        List<String> option = new ArrayList<>();
 
-        Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-        BrowserContext browserContext = browser.newContext();
+        // Starts the browser maximized
+        option.add("--start-maximized");
+
+        // Launches Chromium browser with custom options (non-headless for visual testing)
+        Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setArgs(option));
+        BrowserContext browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
+
+        // Opens a new page for testing
         this.page = browserContext.newPage();
 
         // Opens the target URL for testing
-        this.page.navigate("https://demo.testfire.net/index.jsp");
+        this.page.navigate("https://practicetestautomation.com/");
     }
 
     /**
-     * testFireTest method navigates to the given URL, takes a screenshot, compares it with a baseline image,
+     * PracticeTestAutomationTest method navigates to the given URL, takes a screenshot, compares it with a baseline image,
      * and logs the result in ExtentReports.
      *
      * @param url       The URL to navigate to for the test.
@@ -89,7 +99,7 @@ public class TestFireRegressionTest {
      * @param context   The ITestContext for passing additional test parameters.
      */
     @Test(dataProvider = "dataSupplier")
-    public void testFireTest(String url, String imageName, Method method, ITestContext context) {
+    public void PracticeTestAutomationTest(String url, String imageName, Method method, ITestContext context) {
         // Adds a parameter "screenshot" with the imageName to the test context for further usage
         context.getCurrentXmlTest().addParameter("screenshot", imageName);
 
@@ -97,36 +107,32 @@ public class TestFireRegressionTest {
         extentTest = extentReports.createTest(method.getName() + " || " + url);
 
         try {
-            // Navigates to the provided URL
+            // Navigates to the URL provided in the test data
             this.page.navigate(url);
 
             // Takes a screenshot of the page and saves it with the provided image name
             new ScreenshotUtility().takePageScreenshot(this.page, imageName);
 
-            // Asserts that the current screenshot matches the baseline image, logs failure if not
+            // Compares the current screenshot with a baseline image, logs failure if they don't match
             Assert.assertTrue(new ScreenshotUtility().areImagesEqual(imageName, imageName),
                     "Images do not match for: " + imageName);
         } catch (Exception ex) {
             // Logs any exceptions that occur during the test execution
-            LOGGER.log(Level.SEVERE, "Error during testFireTest execution for " + url + ": " + ex.getMessage(), ex);
+            LOGGER.log(Level.SEVERE, "Error during PracticeTestAutomationTest execution for " + url + ": " + ex.getMessage(), ex);
         }
     }
 
     /**
-     * dataSupplier method provides URLs and corresponding image names for the testFireTest method.
+     * dataSupplier method provides URLs and corresponding image names for the PracticeTestAutomationTest method.
      *
      * @return A 2D array of URLs and image names for data-driven testing.
      */
     @DataProvider
     public Object[][] dataSupplier() {
-        // Returns a set of test data: URL and image name for each test case
+        // Provides test data: URL and corresponding image name for each test case
         return new Object[][]{
-                {"https://demo.testfire.net/index.jsp?content=inside_about.htm", "about_us"},
-                {"https://demo.testfire.net/index.jsp?content=inside_contact.htm", "contact_us"},
-                {"https://demo.testfire.net/index.jsp?content=inside_investor.htm", "investor"},
-                {"https://demo.testfire.net/index.jsp?content=inside_press.htm", "press"},
-                {"https://demo.testfire.net/index.jsp?content=inside_careers.htm", "careers"},
-                {"https://demo.testfire.net/subscribe.jsp", "subscribe"}
+                {"https://practicetestautomation.com/", "home"},
+                {"https://practicetestautomation.com/contact/", "contact"}
         };
     }
 
@@ -141,6 +147,7 @@ public class TestFireRegressionTest {
     public void captureResult(ITestResult result, ITestContext context) {
         // Retrieves the screenshot name from the test context
         String imageName = context.getCurrentXmlTest().getParameter("screenshot");
+
         // Constructs the path for the difference image if any test fails
         String screenshotPath = DIFFERENCE_DIR + imageName + ".png";
 
@@ -148,26 +155,29 @@ public class TestFireRegressionTest {
         if (result.getStatus() == ITestResult.SUCCESS) {
             extentTest.log(Status.PASS, "Test Passed");
         } else if (result.getStatus() == ITestResult.FAILURE) {
+
             // Adds the screenshot to the report if the test fails
             String screenshot = extentTest.addScreenCaptureFromPath(screenshotPath).toString();
             extentTest.log(Status.FAIL, "Test Failed. Screenshot: " + screenshot);
             extentTest.log(Status.FAIL, result.getThrowable());
         } else if (result.getStatus() == ITestResult.SKIP) {
+
             // Logs the test as skipped if the status is skipped
             extentTest.log(Status.SKIP, "Test Skipped");
         }
     }
 
     /**
-     * tearDown method closes the WebDriver instance and flushes the ExtentReports log.
+     * tearDown method closes the Playwright instance and flushes the ExtentReports log.
      */
     @AfterClass
     public void tearDown() {
-        // Closes the WebDriver session if not already closed
+        // Closes the Playwright page and browser instances if not already closed
         if (this.page != null) {
             this.page.close();
             this.playwright.close();
         }
+
         // Flushes and finalizes the ExtentReports
         if (extentReports != null) {
             extentReports.flush();
